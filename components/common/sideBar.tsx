@@ -212,11 +212,11 @@ export default function Sidebar({
           {isOpen && (
             <div className="overflow-hidden">
               <p className="font-medium text-sm text-white truncate">
-                Admin User
+                Jhon
               </p>
 
               <p className="text-xs text-[#AEB9E1] truncate">
-                admin@loansys.in
+                Jhon@loansys.in
               </p>
             </div>
           )}

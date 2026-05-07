@@ -70,9 +70,9 @@ export default function TopBar({
       </div>
 
       {/* RIGHT */}
-      <div className="flex items-center gap-5">
+       <div className="flex items-center gap-5">
         {/* ADD BUTTON */}
-        <button
+        {/* <button
           className="
             hidden
             md:flex
@@ -90,7 +90,7 @@ export default function TopBar({
           "
         >
           + New Loan
-        </button>
+        </button> */}
 
         {/* NOTIFICATION */}
         <button
@@ -151,11 +151,11 @@ export default function TopBar({
           {/* USER INFO */}
           <div className="hidden md:block text-left">
             <p className="text-sm font-semibold text-[#111827] leading-none">
-              Admin User
+              Jhon
             </p>
 
             <p className="text-xs text-gray-500 mt-1">
-              admin@loansys.in
+              Jhon@loansys.in
             </p>
           </div>
 

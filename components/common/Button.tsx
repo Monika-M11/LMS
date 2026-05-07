@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import React from "react";
+import theme from "./theme"; // adjust import path as needed
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "ghost" | "danger";
@@ -22,10 +23,9 @@ const Button = ({
     "inline-flex items-center justify-center gap-2 font-medium tracking-tight transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]";
 
   const variants: Record<string, string> = {
-    primary:
-      "text-[var(--color-cream)] hover:bg-[var(--color-navy-light)] focus-visible:ring-[var(--color-navy)]",
+    primary: "text-white hover:brightness-105 focus-visible:ring-offset-2",
     secondary:
-      "border border-[var(--color-steel)] text-[var(--color-navy)] hover:bg-[var(--color-sand-pale)] focus-visible:ring-[var(--color-steel)]",
+      "border text-[var(--color-navy)] hover:bg-[var(--color-sand-pale)] focus-visible:ring-[var(--color-steel)]",
     ghost:
       "text-[var(--color-navy)] hover:bg-[var(--color-sand-pale)] focus-visible:ring-[var(--color-steel)]",
     danger:
@@ -38,14 +38,16 @@ const Button = ({
     lg: "text-lg px-8 py-4 rounded-[var(--radius-xl)]",
   };
 
+  // Primary button specific styles
+  const primaryStyle = {
+    backgroundColor: theme.colors.navy,
+    color: theme.colors.cream,
+  };
+
   return (
     <button
       className={clsx(base, variants[variant], sizes[size], "w-full", className)}
-      style={
-        variant === "primary"
-          ? { background: "var(--color-navy)" }
-          : undefined
-      }
+      style={variant === "primary" ? primaryStyle : undefined}
       disabled={disabled || loading}
       {...props}
     >
@@ -58,8 +60,11 @@ const Button = ({
           >
             <circle
               className="opacity-25"
-              cx="12" cy="12" r="10"
-              stroke="currentColor" strokeWidth="4"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
             />
             <path
               className="opacity-75"
