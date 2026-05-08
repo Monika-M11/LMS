@@ -1,12 +1,12 @@
-import { api } from "../api";
+// import { api } from "../api";
 
-export const loginUser = (
-  payload: any
-) => {
+// export const loginUser = (
+//   payload: any
+// ) => {
 
-  return api(
-    '/auth/login',
-    payload
-  );
+//   return api(
+//     '/auth/login',
+//     payload
+//   );
 
-};
+// };

@@ -7,6 +7,15 @@ import {
   Search,
 } from 'lucide-react';
 
+import {
+  useEffect,
+  useState,
+} from "react";
+
+import {
+  storage,
+} from "@/src/lib/storage";
+
 interface TopBarProps {
   toggleSidebar: () => void;
 }
@@ -14,6 +23,24 @@ interface TopBarProps {
 export default function TopBar({
   toggleSidebar,
 }: TopBarProps) {
+
+
+  const [user, setUser] =
+  useState<any>(null);
+
+  useEffect(() => {
+
+  const storedUser =
+    storage.getUser();
+
+  if (storedUser) {
+
+    setUser(storedUser);
+
+  }
+
+}, []);
+
   return (
     <header className="h-[82px] bg-white border-b border-[#E9EDF5] px-8 flex items-center justify-between">
       {/* LEFT */}
@@ -113,57 +140,60 @@ export default function TopBar({
         </button>
 
         {/* PROFILE */}
-        <button
-          className="
-            flex
-            items-center
-            gap-3
-            bg-[#F5F7FB]
-            hover:bg-gray-100
-            transition-all
-            rounded-2xl
-            pl-3
-            pr-4
-            h-[56px]
-          "
-        >
-          {/* AVATAR */}
-          <div
-            className="
-              w-11
-              h-11
-              rounded-2xl
-              bg-gradient-to-br
-              from-[#5561D7]
-              to-[#7C3AED]
-              flex
-              items-center
-              justify-center
-              text-white
-              font-semibold
-              text-sm
-              shadow-sm
-            "
-          >
-            AU
-          </div>
+               {/* PROFILE */}
+       <div
+  className="
+    flex
+    items-center
+    gap-3
+    bg-[#F5F7FB]
+    rounded-2xl
+    px-3
+    py-2
+  "
+>
 
-          {/* USER INFO */}
-          <div className="hidden md:block text-left">
-            <p className="text-sm font-semibold text-[#111827] leading-none">
-              Jhon
-            </p>
+  <div
+    className="
+      w-11
+      h-11
+      rounded-2xl
+      bg-[#232B5D]
+      flex
+      items-center
+      justify-center
+      text-white
+      font-semibold
+      uppercase
+    "
+  >
 
-            <p className="text-xs text-gray-500 mt-1">
-              Jhon@loansys.in
-            </p>
-          </div>
+    {user?.full_name
+      ?.charAt(0) || 'U'}
 
-          <ChevronDown
-            size={16}
-            className="text-gray-500 hidden md:block"
-          />
-        </button>
+  </div>
+
+  <div className="hidden md:block">
+
+    <p className="text-sm font-semibold text-[#111827]">
+
+      {user?.full_name ||
+        user?.fullName ||
+        'User'}
+
+    </p>
+
+    <p className="text-xs text-gray-500">
+
+      {user?.role === 'admin'
+        ? 'Super Admin'
+        : 'Customer'}
+
+    </p>
+
+  </div>
+
+</div>
       </div>
     </header>
   );

@@ -71,6 +71,7 @@ const handleLogin = async () => {
     storage.setUser(
       data.user
     );
+  
 
     // PROFILE CHECK
    if (!data.user.profileCompleted) {
@@ -144,17 +145,19 @@ const handleLogin = async () => {
       >
         {/* LEFT PANEL */}
         <div
-          className="
-            hidden
-            lg:flex
-            flex-col
-            justify-between
-            bg-[#30364F]
-            p-12
-            relative
-            overflow-hidden
-          "
-        >
+  className="
+    hidden
+    lg:flex
+    flex-col
+    items-center
+    justify-center
+    text-center
+    bg-[#30364F]
+    p-12
+    relative
+    overflow-hidden
+  "
+>
           {/* BG CIRCLE */}
           <div
             className="
@@ -181,12 +184,53 @@ const handleLogin = async () => {
           />
 
           {/* LOGO */}
-          <div className="relative z-10">
+          {/* <div className="relative z-10">
             <Logo
               size="lg"
               inverted
             />
-          </div>
+          </div> */}
+
+
+        {/* LOGO */}
+<div className="relative z-10 flex items-center gap-2 mb-10">
+
+  {/* ICON */}
+  <div
+    className="
+      w-14
+      h-14
+      rounded-2xl
+      bg-white
+      flex
+      items-center
+      justify-center
+      shadow-sm
+      flex-shrink-0
+    "
+  >
+    <span className="text-[#232B5D] font-bold text-2xl">
+      ₹
+    </span>
+  </div>
+
+  {/* LOGO TEXT */}
+  <h1
+    className="
+      text-white
+      text-4xl
+      tracking-tight
+      leading-none
+    "
+    style={{
+      fontFamily: 'var(--font-display)',
+      fontWeight: 500,
+    }}
+  >
+    LoanSys
+  </h1>
+
+</div>
 
           {/* CONTENT */}
           <div className="relative z-10">
@@ -221,7 +265,7 @@ const handleLogin = async () => {
           </div>
 
           {/* STATS */}
-          <div className="relative z-10 flex gap-4">
+          {/* <div className="relative z-10 flex gap-4">
             <div className="bg-white/10 backdrop-blur rounded-2xl px-5 py-4">
               <p className="text-[#C8D3DA] text-xs">
                 Active Loans
@@ -241,7 +285,7 @@ const handleLogin = async () => {
                 8.2K
               </h3>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* RIGHT PANEL */}

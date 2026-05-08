@@ -5,6 +5,13 @@ import { usePathname } from 'next/navigation';
 import { ChevronLeft } from 'lucide-react';
 
 import { SIDEBAR_MENU } from '@/constant/sidebar';
+import {
+  storage,
+} from '@/src/lib/storage';
+import {
+  useEffect,
+  useState,
+} from 'react';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -16,6 +23,22 @@ export default function Sidebar({
   toggle,
 }: SidebarProps) {
   const pathname = usePathname();
+
+  const [user, setUser] =
+  useState<any>(null);
+
+  useEffect(() => {
+
+  const storedUser =
+    storage.getUser();
+
+  if (storedUser) {
+
+    setUser(storedUser);
+
+  }
+
+}, []);
 
   return (
     <aside
@@ -190,36 +213,51 @@ export default function Sidebar({
             gap-3
           "
         >
+          
           <div
-            className="
-              w-12
-              h-12
-              rounded-2xl
-              bg-gradient-to-br
-              from-[#5561D7]
-              to-[#7C3AED]
-              flex
-              items-center
-              justify-center
-              text-white
-              font-semibold
-              shadow-sm
-            "
-          >
-            AU
-          </div>
+  className="
+    w-12
+    h-12
+    rounded-2xl
+    bg-gradient-to-br
+    from-[#5561D7]
+    to-[#7C3AED]
+    flex
+    items-center
+    justify-center
+    text-white
+    font-semibold
+    shadow-sm
+    uppercase
+  "
+>
 
-          {isOpen && (
-            <div className="overflow-hidden">
-              <p className="font-medium text-sm text-white truncate">
-                Jhon
-              </p>
+  {user?.full_name
+    ?.charAt(0) || 'U'}
 
-              <p className="text-xs text-[#AEB9E1] truncate">
-                Jhon@loansys.in
-              </p>
-            </div>
-          )}
+</div>
+
+{isOpen && (
+
+  <div className="overflow-hidden">
+
+    <p className="font-medium text-sm text-white truncate">
+
+      {user?.full_name ||
+        'User'}
+
+    </p>
+
+    <p className="text-xs text-[#AEB9E1] truncate">
+
+      {user?.email ||
+        'user@email.com'}
+
+    </p>
+
+  </div>
+
+)}
         </div>
       </div>
     </aside>

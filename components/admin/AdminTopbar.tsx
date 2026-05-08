@@ -6,6 +6,15 @@ import {
   Search,
 } from "lucide-react";
 
+import {
+  useEffect,
+  useState,
+} from "react";
+
+import {
+  storage,
+} from "@/src/lib/storage";
+
 interface Props {
   toggleSidebar: () => void;
 }
@@ -13,6 +22,24 @@ interface Props {
 export default function AdminTopbar({
   toggleSidebar,
 }: Props) {
+
+
+  const [user, setUser] =
+  useState<any>(null);
+
+  useEffect(() => {
+
+  const storedUser =
+    storage.getUser();
+
+  if (storedUser) {
+
+    setUser(storedUser);
+
+  }
+
+}, []);
+
   return (
     <header className="h-[82px] bg-white border-b border-[#E9EDF5] px-6 flex items-center justify-between">
       {/* LEFT */}
@@ -59,21 +86,59 @@ export default function AdminTopbar({
         </button>
 
         {/* PROFILE */}
-        <div className="flex items-center gap-3 bg-[#F5F7FB] rounded-2xl px-3 py-2">
-          <div className="w-11 h-11 rounded-2xl bg-[#232B5D] flex items-center justify-center text-white font-semibold">
-            A
-          </div>
+       <div
+  className="
+    flex
+    items-center
+    gap-3
+    bg-[#F5F7FB]
+    rounded-2xl
+    px-3
+    py-2
+  "
+>
 
-          <div className="hidden md:block">
-            <p className="text-sm font-semibold text-[#111827]">
-              Admin User
-            </p>
+  <div
+    className="
+      w-11
+      h-11
+      rounded-2xl
+      bg-[#232B5D]
+      flex
+      items-center
+      justify-center
+      text-white
+      font-semibold
+      uppercase
+    "
+  >
 
-            <p className="text-xs text-gray-500">
-              Super Admin
-            </p>
-          </div>
-        </div>
+    {user?.full_name
+      ?.charAt(0) || 'U'}
+
+  </div>
+
+  <div className="hidden md:block">
+
+    <p className="text-sm font-semibold text-[#111827]">
+
+      {user?.full_name ||
+        user?.fullName ||
+        'User'}
+
+    </p>
+
+    <p className="text-xs text-gray-500">
+
+      {user?.role === 'admin'
+        ? 'Super Admin'
+        : 'Customer'}
+
+    </p>
+
+  </div>
+
+</div>
       </div>
     </header>
   );

@@ -6,6 +6,14 @@ import { ChevronLeft } from "lucide-react";
 
 import { ADMIN_SIDEBAR_MENU } from "@/constant/adminSidebar";
 
+import {
+  storage,
+} from '@/src/lib/storage';
+import {
+  useEffect,
+  useState,
+} from 'react';
+
 interface Props {
   isOpen: boolean;
   toggle: () => void;
@@ -15,7 +23,25 @@ export default function AdminSidebar({
   isOpen,
   toggle,
 }: Props) {
+
   const pathname = usePathname();
+
+   const [user, setUser] =
+  useState<any>(null);
+
+  useEffect(() => {
+
+  const storedUser =
+    storage.getUser();
+
+  if (storedUser) {
+
+    setUser(storedUser);
+
+  }
+
+}, []);
+
 
   return (
     <aside
@@ -136,21 +162,50 @@ export default function AdminSidebar({
       {/* FOOTER */}
       <div className="p-4 border-t border-white/10">
         <div className="bg-white/5 rounded-2xl p-4 flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#5561D7] to-[#7C3AED] flex items-center justify-center font-semibold">
-            AD
-          </div>
+            <div
+  className="
+    w-12
+    h-12
+    rounded-2xl
+    bg-gradient-to-br
+    from-[#5561D7]
+    to-[#7C3AED]
+    flex
+    items-center
+    justify-center
+    text-white
+    font-semibold
+    shadow-sm
+    uppercase
+  "
+>
 
-          {isOpen && (
-            <div>
-              <p className="font-medium text-sm">
-                Admin User
-              </p>
+  {user?.full_name
+    ?.charAt(0) || 'U'}
 
-              <p className="text-xs text-[#AEB9E1]">
-                admin@loansys.in
-              </p>
-            </div>
-          )}
+</div>
+
+{isOpen && (
+
+  <div className="overflow-hidden">
+
+    <p className="font-medium text-sm text-white truncate">
+
+      {user?.full_name ||
+        'User'}
+
+    </p>
+
+    <p className="text-xs text-[#AEB9E1] truncate">
+
+      {user?.email ||
+        'user@email.com'}
+
+    </p>
+
+  </div>
+
+)}
         </div>
       </div>
     </aside>

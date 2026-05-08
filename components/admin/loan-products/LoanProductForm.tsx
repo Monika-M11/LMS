@@ -9,14 +9,16 @@ interface Props {
 export default function LoanProductForm({
   onSubmit,
 }: Props) {
-  const [form, setForm] = useState({
-    name: "",
-    interestRate: "",
-    maxAmount: "",
-    tenure: "",
-    processingFee: "",
-    eligibility: "",
-  });
+const [form, setForm] = useState({
+  name: "",
+  interestRate: "",
+  maxAmount: "",
+  tenure: "",
+  processingFee: "",
+  eligibility: "",
+  emiExample: "",
+  terms: "",
+});
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -43,6 +45,8 @@ export default function LoanProductForm({
       tenure: "",
       processingFee: "",
       eligibility: "",
+      emiExample: "",
+       terms: "",
     });
   };
 
@@ -136,6 +140,39 @@ export default function LoanProductForm({
             required
           />
         </div>
+
+
+        <div>
+  <label className="text-sm font-medium text-[#111827]">
+    EMI Example
+  </label>
+
+  <input
+    name="emiExample"
+    value={form.emiExample}
+    onChange={handleChange}
+    placeholder="₹10,000 for 5 years = ₹215 EMI"
+    className="w-full mt-2 rounded-2xl border border-[#DDE3EC] px-4 py-4 outline-none focus:border-[#232B5D]"
+    
+    required
+  />
+</div>
+
+<div>
+  <label className="text-sm font-medium text-[#111827]">
+    Terms & Conditions
+  </label>
+
+  <textarea
+    name="terms"
+    value={form.terms}
+    onChange={handleChange}
+    placeholder="Subject to approval"
+    className="w-full mt-2 rounded-2xl border border-[#DDE3EC] px-4 py-4 outline-none focus:border-[#232B5D]"
+    rows={4}
+    required
+  />
+</div>
 
         {/* ELIGIBILITY */}
         <div>

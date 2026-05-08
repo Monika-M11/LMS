@@ -17,8 +17,10 @@ export default function EligibilityScreen() {
   const params = useParams();
 
   const id = params?.id as string;
+  const loanId = Number(id);
 
   const [product, setProduct] = useState<any>(null);
+
   const [fields, setFields] = useState<any[]>([]);
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
@@ -36,7 +38,8 @@ export default function EligibilityScreen() {
 
         const [productRes, fieldsRes] = await Promise.all([
           getLoanProduct(id),
-          getEligibilityFields(id)
+          getEligibilityFields(loanId)
+
         ]);
 
         console.log("Product API Response:", productRes);
@@ -67,14 +70,16 @@ export default function EligibilityScreen() {
 
     setSubmitting(true);
     try {
-      const res = await checkEligibility({
+      const data = await checkEligibility({
         loanId: id,
         ...formData,
       });
 
-      const data = await res.json();
+      router.push(
+        `/dashboard/eligibility-result/${id}?eligible=${data.eligible}`
+      );
 
-      router.push(`/dashboard/eligibility-result/${id}?eligible=${data.eligible}`);
+     
     } catch (err) {
       console.error(err);
       alert("Failed to check eligibility. Please try again.");
