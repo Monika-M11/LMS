@@ -203,7 +203,7 @@ export default function ProfilePage() {
 
   // Adjust this to wherever you store the logged-in userId
   // e.g. from localStorage, a context, or a cookie
-  const userId = Number(localStorage.getItem('userId'));
+  const userId = 0;
 
   useEffect(() => {
     const fetchProfile = async () => {

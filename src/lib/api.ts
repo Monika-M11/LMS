@@ -294,3 +294,22 @@ export const getProfile = (userId: number) => {
 export const updateProfile = (data: any) => {
   return request('/users/update-profile', data);
 };
+
+//Application Form
+export const createApplication = (data: any) =>
+  request('/applications/create', data, true);
+
+export const getMyApplications = (userId: number) =>
+  request('/applications/my-applications', { userId });
+
+
+    export const uploadDocuments =
+  (formData: FormData) =>
+
+    fetch(
+      `${BASE_URL}/applications/upload-documents`,
+      {
+        method: 'POST',
+        body: formData,
+      }
+    ).then((res) => res.json());

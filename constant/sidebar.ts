@@ -31,7 +31,7 @@ href: '/dashboard/loan-products',
       {
         name: 'My Applications',
         icon: FileText,
-        href: '/applications',
+        href: '/dashboard/my-applications',
         danger: false,
       },
 
