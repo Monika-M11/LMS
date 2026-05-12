@@ -268,8 +268,12 @@ export const deleteEligibilityRule = (id: number) => {
 };
 
 // ─── ELIGIBILITY CHECK ────────────────────────────────────
-export const checkEligibility = (payload: any) => {
-  return request('/loans/check-eligibility', payload);
+export const checkEligibility = async (payload: any) => {
+  const data = await request('/loans/check-eligibility', payload);
+  
+  console.log("🔍 Raw Response from Backend:", JSON.stringify(data, null, 2)); // ← Debug
+  
+  return data;   // Make sure we return full response
 };
 
 // ─── APPLICATION FIELDS ───────────────────────────────────
@@ -313,3 +317,50 @@ export const getMyApplications = (userId: number) =>
         body: formData,
       }
     ).then((res) => res.json());
+
+
+  // ─── ADMIN APPLICATIONS ─────────────────────────────
+
+export const getAllApplications = () => {
+  return request('/applications/all', {}, true);
+};
+
+export const getApplicationById = (id: string) => {
+  return request(`/applications/${id}`, {}, true);
+};
+
+export const updateApplicationStatus = (
+  id: string,
+  status: string
+) => {
+  return fetch(
+    `${BASE_URL}/applications/status/${id}`,
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+          body: JSON.stringify({ status }),
+    }
+  ).then((res) => res.json());
+};
+
+
+
+export const approveLoan = (data: {
+  applicationId: number;
+  approvedAmount: number;
+  interestRate: number;
+  tenureMonths: number;
+  remarks?: string;
+}) => {
+  return request('/approvals/approve', data);
+};
+
+export const getApprovalDetails = (
+  applicationId: number
+) => {
+  return request('/approvals/details', {
+    applicationId,
+  });
+};

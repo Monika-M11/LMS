@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-import { getMyApplications } from '@/src/lib/api';
-import { storage } from '@/src/lib/storage';
+import { getAllApplications } from '@/src/lib/api';
 
 interface Application {
 
@@ -31,13 +31,14 @@ interface Application {
 
 }
 
-export default function MyApplicationsPage() {
+export default function AdminApplicationsPage() {
+
+  const router = useRouter();
 
   const [applications, setApplications] =
     useState<Application[]>([]);
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchApplications();
@@ -49,25 +50,8 @@ export default function MyApplicationsPage() {
 
       setLoading(true);
 
-      const user = storage.getUser();
-
-      if (!user?.id) {
-
-        console.warn('No user found');
-
-        setApplications([]);
-
-        return;
-
-      }
-
       const response =
-        await getMyApplications(user.id);
-
-      console.log(
-        'APPLICATIONS:',
-        response
-      );
+        await getAllApplications();
 
       setApplications(
         response.applications || []
@@ -75,12 +59,7 @@ export default function MyApplicationsPage() {
 
     } catch (error) {
 
-      console.log(
-        'FETCH ERROR:',
-        error
-      );
-
-      setApplications([]);
+      console.log(error);
 
     } finally {
 
@@ -98,11 +77,11 @@ export default function MyApplicationsPage() {
       <div className="mb-6">
 
         <h1 className="text-3xl font-bold">
-          My Applications
+          Loan Applications
         </h1>
 
         <p className="text-gray-500 mt-1">
-          Track all your loan requests
+          Review customer loan requests
         </p>
 
       </div>
@@ -115,12 +94,11 @@ export default function MyApplicationsPage() {
       )}
 
       {/* EMPTY */}
-      {!loading &&
-        applications.length === 0 && (
-          <p className="text-gray-500">
-            No applications found
-          </p>
-        )}
+      {!loading && applications.length === 0 && (
+        <p className="text-gray-500">
+          No applications found
+        </p>
+      )}
 
       {/* APPLICATION LIST */}
       <div className="space-y-4">
@@ -129,11 +107,19 @@ export default function MyApplicationsPage() {
 
           <div
             key={item.id}
+            onClick={() =>
+              router.push(
+                `/admin/applications/${item.id}`
+              )
+            }
             className="
               bg-white
               border
               rounded-2xl
               p-5
+              cursor-pointer
+              hover:shadow-md
+              transition
             "
           >
 
@@ -150,7 +136,7 @@ export default function MyApplicationsPage() {
                   </h2>
 
                   <p className="text-sm text-gray-400">
-                    Loan #{item.loanId}
+                    #{item.loanId}
                   </p>
 
                 </div>
@@ -159,7 +145,6 @@ export default function MyApplicationsPage() {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
 
                   <div>
-
                     <p className="text-xs text-gray-400">
                       Amount
                     </p>
@@ -167,11 +152,9 @@ export default function MyApplicationsPage() {
                     <p className="font-medium text-sm">
                       ₹{item.amount || 'N/A'}
                     </p>
-
                   </div>
 
                   <div>
-
                     <p className="text-xs text-gray-400">
                       Salary
                     </p>
@@ -179,11 +162,9 @@ export default function MyApplicationsPage() {
                     <p className="font-medium text-sm">
                       ₹{item.salary || 'N/A'}
                     </p>
-
                   </div>
 
                   <div>
-
                     <p className="text-xs text-gray-400">
                       Company
                     </p>
@@ -191,11 +172,9 @@ export default function MyApplicationsPage() {
                     <p className="font-medium text-sm truncate">
                       {item.company || 'N/A'}
                     </p>
-
                   </div>
 
                   <div>
-
                     <p className="text-xs text-gray-400">
                       Employment
                     </p>
@@ -203,7 +182,6 @@ export default function MyApplicationsPage() {
                     <p className="font-medium text-sm">
                       {item.employmentType || 'N/A'}
                     </p>
-
                   </div>
 
                 </div>
@@ -213,11 +191,10 @@ export default function MyApplicationsPage() {
                   item.status === 'approved' && (
                     <div className="flex flex-wrap gap-3 mt-5">
 
-                      {/* APPROVED AMOUNT */}
                       <div className="bg-green-50 rounded-xl px-4 py-2">
 
                         <p className="text-[11px] text-gray-500">
-                          Approved Amount
+                          Approved
                         </p>
 
                         <p className="text-sm font-semibold text-green-700">
@@ -226,7 +203,6 @@ export default function MyApplicationsPage() {
 
                       </div>
 
-                      {/* INTEREST */}
                       <div className="bg-blue-50 rounded-xl px-4 py-2">
 
                         <p className="text-[11px] text-gray-500">
@@ -239,7 +215,6 @@ export default function MyApplicationsPage() {
 
                       </div>
 
-                      {/* TENURE */}
                       <div className="bg-purple-50 rounded-xl px-4 py-2">
 
                         <p className="text-[11px] text-gray-500">
