@@ -190,9 +190,15 @@ const request = async (
   };
 
   if (auth) {
-    const token = storage.getToken();
+
+    const token =
+      storage.getAdminToken() ||
+      storage.getUserToken();
+
     if (token) {
-      headers.Authorization = `Bearer ${token}`;
+
+      headers.Authorization =
+        `Bearer ${token}`;
     }
   }
 
@@ -317,6 +323,16 @@ export const getMyApplications = (userId: number) =>
         body: formData,
       }
     ).then((res) => res.json());
+
+export const getExtraDocuments =
+  (loanId: string) => {
+
+    return request(
+      '/applications/extra-documents',
+      { loanId }
+    );
+
+};
 
 
   // ─── ADMIN APPLICATIONS ─────────────────────────────

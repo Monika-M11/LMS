@@ -47,12 +47,8 @@ const [loading, setLoading] =
 //     router.push("/dashboard");
 //   }
 // };
-
-
 const handleLogin = async () => {
-
   try {
-
     setLoading(true);
 
     const data =
@@ -62,59 +58,62 @@ const handleLogin = async () => {
         role,
       });
 
+    // CLEAR OLD TOKENS FIRST
+    storage.clearAuth();
+
     // SAVE TOKEN
-    storage.setToken(
-      data.token
-    );
-
-    // SAVE USER
-    storage.setUser(
-      data.user
-    );
-  
-
-    // PROFILE CHECK
-   if (!data.user.profileCompleted) {
-
-  if (data.user.role === 'admin') {
-
-    router.push('/admin/profile');
-
-  } else {
-
-    router.push('/dashboard/profile');
-
-  }
-
-  return;
-}
-
-    // ROLE CHECK
     if (
       data.user.role === 'admin'
     ) {
-
-      router.push(
-        '/admin/dashboard'
+      storage.setAdminToken(
+        data.token
       );
-
     } else {
-
-      router.push('/dashboard');
-
+      storage.setUserToken(
+        data.token
+      );
     }
 
+    // SAVE USER
+    storage.setUser(data.user);
+
+    // REDIRECT
+    if (
+      !data.user.profileCompleted
+    ) {
+      if (
+        data.user.role === 'admin'
+      ) {
+        window.location.replace(
+          '/admin/profile'
+        );
+      } else {
+        window.location.replace(
+          '/dashboard/profile'
+        );
+      }
+
+      return;
+    }
+
+    if (
+      data.user.role === 'admin'
+    ) {
+      window.location.replace(
+        '/admin/dashboard'
+      );
+    } else {
+      window.location.replace(
+        '/dashboard'
+      );
+    }
   } catch (error: any) {
-
     alert(error.message);
-
   } finally {
-
     setLoading(false);
-
   }
-
 };
+
 
   return (
     <div

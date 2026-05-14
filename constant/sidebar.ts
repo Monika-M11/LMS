@@ -10,7 +10,33 @@ import {
   LogOut,
 } from 'lucide-react';
 
-export const SIDEBAR_MENU = [
+
+
+
+import { storage } from '@/src/lib/storage';
+
+export const logout = () => {
+  storage.clearAuth();
+
+  window.location.replace(
+    '/login'
+  );
+};
+type SidebarItem = {
+  name: string;
+  icon: any;
+  href: string;
+  danger?: boolean;
+  action?: () => void;
+};
+
+type SidebarSection = {
+  title: string;
+  items: SidebarItem[];
+};
+
+
+export const SIDEBAR_MENU: SidebarSection[] = [
   {
     title: 'MAIN',
     items: [
@@ -80,11 +106,12 @@ href: '/dashboard/loan-products',
   {
     title: 'SYSTEM',
     items: [
-      {
-        name: 'Logout',
+       {
+        name: "Logout",
         icon: LogOut,
-        href: '/logout',
+        href: "#",
         danger: true,
+        action: logout,
       },
     ],
   },

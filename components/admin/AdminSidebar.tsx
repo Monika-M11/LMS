@@ -113,46 +113,83 @@ export default function AdminSidebar({
                 const isActive =
                   pathname === item.href;
 
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className={`
-                      flex
-                      items-center
-                      gap-4
-                      px-4
-                      h-[52px]
-                      rounded-2xl
-                      transition-all
-                      duration-200
-                      ${
-                        isActive
-                          ? "bg-white text-[#232B5D] shadow-lg"
-                          : item.danger
-                          ? "hover:bg-red-500/10 text-red-300"
-                          : "hover:bg-white/5 text-[#C7D2FE]"
-                      }
-                    `}
-                  >
-                    <Icon
-                      size={20}
-                      className={
-                        isActive
-                          ? "text-[#232B5D]"
-                          : item.danger
-                          ? "text-red-300"
-                          : "text-[#AEB9E1]"
-                      }
-                    />
+                return item.action ? (
+  <button
+    key={item.name}
+    onClick={item.action}
+    className={`
+      w-full
+      flex
+      items-center
+      gap-4
+      px-4
+      h-[52px]
+      rounded-2xl
+      transition-all
+      duration-200
+      ${
+        item.danger
+          ? "hover:bg-red-500/10 text-red-300"
+          : "hover:bg-white/5 text-[#C7D2FE]"
+      }
+    `}
+  >
+    <Icon
+      size={20}
+      className={
+        item.danger
+          ? "text-red-300"
+          : "text-[#AEB9E1]"
+      }
+    />
 
-                    {isOpen && (
-                      <span className="text-[15px] font-medium">
-                        {item.name}
-                      </span>
-                    )}
-                  </Link>
-                );
+    {isOpen && (
+      <span className="text-[15px] font-medium">
+        {item.name}
+      </span>
+    )}
+  </button>
+) : (
+  <Link
+    key={item.name}
+    href={item.href}
+    className={`
+      flex
+      items-center
+      gap-4
+      px-4
+      h-[52px]
+      rounded-2xl
+      transition-all
+      duration-200
+      ${
+        isActive
+          ? "bg-white text-[#232B5D] shadow-lg"
+          : item.danger
+          ? "hover:bg-red-500/10 text-red-300"
+          : "hover:bg-white/5 text-[#C7D2FE]"
+      }
+    `}
+  >
+    <Icon
+      size={20}
+      className={
+        isActive
+          ? "text-[#232B5D]"
+          : item.danger
+          ? "text-red-300"
+          : "text-[#AEB9E1]"
+      }
+    />
+
+    {isOpen && (
+      <span className="text-[15px] font-medium">
+        {item.name}
+      </span>
+    )}
+  </Link>
+);
+          
               })}
             </div>
           </div>

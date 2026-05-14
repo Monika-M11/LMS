@@ -1,31 +1,30 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import Button from '@/components/common/Button';
 
 import {
   uploadDocuments,
+  getExtraDocuments,
 } from '@/src/lib/api';
-
 
 import {
   useParams,
   useRouter,
 } from 'next/navigation';
 
-export default function
-DocumentUploadScreen() {
+export default function DocumentUploadScreen() {
 
-  const router =
-    useRouter();
+  const router = useRouter();
 
-  const params =
-    useParams();
+  const params = useParams();
 
-  const applicationId =
-    params?.applicationId as string;
+  const applicationId = params?.id as string;
 
+    console.log('applicationId from params:', applicationId);
+
+  // BASIC DOCUMENTS
   const [files, setFiles] =
     useState<any>({
       aadhaar: null,
@@ -34,6 +33,55 @@ DocumentUploadScreen() {
       bankStatement: null,
     });
 
+  // EXTRA DOCUMENTS
+  const [extraDocs, setExtraDocs] =
+    useState<any[]>([]);
+
+  const [extraFiles, setExtraFiles] =
+    useState<any>({});
+
+  // FETCH EXTRA DOCS
+  useEffect(() => {
+
+    const fetchDocs =
+      async () => {
+
+        const loanId =
+          new URLSearchParams(
+            window.location.search
+          ).get('loanId');
+
+        // Prefer applicationId from query (set by LoanApplicationScreen)
+        // fallback to pathname param if needed.
+        const applicationIdFromQuery =
+          new URLSearchParams(
+            window.location.search
+          ).get('applicationId');
+
+
+        if (!loanId) return;
+
+        const data =
+          await getExtraDocuments(
+            loanId
+          );
+                console.log(
+  'Dynamic Docs:',
+  data.documents
+);
+
+        setExtraDocs(
+          data.documents || []
+        );
+      };
+
+
+
+    fetchDocs();
+
+  }, []);
+
+  // BASIC FILE CHANGE
   const handleFileChange = (
     key: string,
     file: File | null
@@ -46,56 +94,55 @@ DocumentUploadScreen() {
 
   };
 
-  const handleSubmit =
-    async () => {
+  // EXTRA FILE CHANGE
+  const handleExtraFile = (
+    documentId: number,
+    file: File | null
+  ) => {
 
-      try {
-
-        const formData =
-          new FormData();
-
-        formData.append(
-          'applicationId',
-          applicationId
-        );
-
-        Object.keys(files)
-          .forEach((key) => {
-
-          if (files[key]) {
-
-            formData.append(
-              key,
-              files[key]
-            );
-
-          }
-
-        });
-
-        await uploadDocuments(
-          formData
-        );
-
-        alert(
-          'Application submitted'
-        );
-
-        router.push(
-          '/dashboard/my-applications'
-        );
-
-      } catch (error) {
-
-        console.log(error);
-
-        alert(
-          'Failed to upload documents'
-        );
-
-      }
+    setExtraFiles((prev: any) => ({
+      ...prev,
+      [documentId]: file,
+    }));
 
   };
+
+  // SUBMIT
+  const handleSubmit = async () => {
+  try {
+    console.log('applicationId:', applicationId); // ← check this
+    
+    const formData = new FormData();
+    formData.append('applicationId', applicationId);
+
+    console.log('FormData applicationId:', formData.get('applicationId')); // ← check this
+
+    // BASIC DOCS
+    Object.keys(files).forEach((key) => {
+      if (files[key]) {
+        formData.append(key, files[key]);
+        console.log('Appending file:', key, files[key].name); // ← check files
+      }
+    });
+
+    // EXTRA DOCS
+    Object.keys(extraFiles).forEach((id) => {
+      if (extraFiles[id]) {
+        formData.append(`extra_${id}`, extraFiles[id]);
+        console.log('Appending extra file:', id, extraFiles[id].name);
+      }
+    });
+
+    await uploadDocuments(formData);
+
+    alert('Application submitted');
+    router.push('/dashboard/my-applications');
+
+  } catch (error) {
+    console.log('Upload error:', error); // ← check full error
+    alert('Failed to upload documents');
+  }
+};
 
   return (
 
@@ -122,6 +169,8 @@ DocumentUploadScreen() {
         </h1>
 
         <div className="space-y-5 mt-8">
+
+          {/* BASIC DOCS */}
 
           <UploadCard
             title="Aadhaar Card"
@@ -162,6 +211,23 @@ DocumentUploadScreen() {
               )
             }
           />
+
+          {/* EXTRA DOCS */}
+
+          {extraDocs.map((doc) => (
+
+            <UploadCard
+              key={doc.id}
+              title={doc.document_name}
+              onChange={(file) =>
+                handleExtraFile(
+                  doc.id,
+                  file
+                )
+              }
+            />
+
+          ))}
 
         </div>
 

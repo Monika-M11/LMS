@@ -11,11 +11,23 @@ import {
   LogOut,
 } from "lucide-react";
 
+import { storage } from "@/src/lib/storage";
+
+export const logout = () => {
+  storage.clearAuth();
+
+  window.location.replace(
+    '/login'
+  );
+};
+
+
 type SidebarItem = {
   name: string;
   icon: any;
   href: string;
   danger?: boolean;
+  action?: () => void;
 };
 
 type SidebarSection = {
@@ -91,12 +103,13 @@ export const ADMIN_SIDEBAR_MENU: SidebarSection[] = [
   {
     title: "SYSTEM",
     items: [
-      {
-        name: "Logout",
-        icon: LogOut,
-        href: "/login",
-        danger: true,
-      },
+     {
+  name: "Logout",
+  icon: LogOut,
+  href: "#",
+  danger: true,
+  action: logout,
+},
     ],
   },
 ];
